@@ -1,0 +1,14 @@
+__pycache__/
+.DS_Store
+.pytest_cache/
+
+simulation_logs/
+smoke_test_results/
+smoke_test_results_2/
+smoke_test_results_3/
+smoke_test_results_plots/
+centralized_smoke_results/
+centralized_multiclass_smoke/
+federated_multiclass_smoke/
+centralized_results/
+federated_results/

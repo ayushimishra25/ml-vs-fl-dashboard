@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: ml-vs-fl-dashboard
+    runtime: python
+    plan: free
+    region: singapore
+    buildCommand: pip install -r requirements.txt
+    startCommand: python ids_dashboard_server.py
+    healthCheckPath: /healthz
+    autoDeployTrigger: commit
+    envVars:
+      - key: CSV_PATH
+        value: deployment_assets/stream_source.csv
+      - key: ML_MODEL_PATH
+        value: deployment_assets/models/centralized_best_model.npz
+      - key: FL_MODEL_PATH
+        value: deployment_assets/models/federated_best_model.npz

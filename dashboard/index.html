@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live IDS Dashboard</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Multiclass Intrusion Monitoring</p>
+          <h1>Live ML vs FL Dashboard</h1>
+        </div>
+        <div class="topbar-meta">
+          <span id="status-pill" class="pill idle">Idle</span>
+          <span id="event-counter" class="counter">0 events</span>
+        </div>
+      </header>
+
+      <section class="controls">
+        <div class="control-grid">
+          <label>
+            <span>Mode</span>
+            <select id="mode">
+              <option value="synthetic">Synthetic</option>
+              <option value="replay">Replay</option>
+            </select>
+          </label>
+          <label>
+            <span>Sampling</span>
+            <select id="sampling-strategy">
+              <option value="balanced">Balanced</option>
+              <option value="natural">Natural</option>
+            </select>
+          </label>
+          <label>
+            <span>Focus Class</span>
+            <select id="focus-class">
+              <option value="all">All Classes</option>
+            </select>
+          </label>
+          <label>
+            <span>Events</span>
+            <input id="events" type="number" min="1" value="60" />
+          </label>
+          <label>
+            <span>Interval (sec)</span>
+            <input id="interval" type="number" min="0" step="0.1" value="0.6" />
+          </label>
+          <label>
+            <span>Noise Scale</span>
+            <input id="noise-scale" type="number" min="0" step="0.01" value="0.05" />
+          </label>
+          <label>
+            <span>Seed</span>
+            <input id="seed" type="number" step="1" value="42" />
+          </label>
+        </div>
+        <div class="button-row">
+          <button id="start-button" class="button primary">Start Stream</button>
+          <button id="stop-button" class="button">Stop</button>
+        </div>
+      </section>
+
+      <section class="metrics-band">
+        <div class="metric">
+          <span class="metric-label">ML Accuracy</span>
+          <strong id="ml-accuracy">0.0000</strong>
+        </div>
+        <div class="metric">
+          <span class="metric-label">FL Accuracy</span>
+          <strong id="fl-accuracy">0.0000</strong>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Agreement</span>
+          <strong id="agreement-rate">0.0000</strong>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Classes Seen</span>
+          <strong id="classes-seen">0 / 0</strong>
+        </div>
+      </section>
+
+      <main class="main-grid">
+        <section class="current-panel">
+          <div class="section-head">
+            <h2>Current Event</h2>
+            <span id="current-time" class="muted">Waiting for stream</span>
+          </div>
+          <div class="current-summary">
+            <div class="summary-block">
+              <span class="summary-label">Ground Truth</span>
+              <strong id="truth-label">-</strong>
+            </div>
+            <div class="summary-block">
+              <span class="summary-label">ML Prediction</span>
+              <strong id="ml-label">-</strong>
+              <div class="bar-track"><div id="ml-bar" class="bar ml"></div></div>
+            </div>
+            <div class="summary-block">
+              <span class="summary-label">FL Prediction</span>
+              <strong id="fl-label">-</strong>
+              <div class="bar-track"><div id="fl-bar" class="bar fl"></div></div>
+            </div>
+            <div class="summary-block">
+              <span class="summary-label">Agreement</span>
+              <strong id="agree-label">-</strong>
+            </div>
+          </div>
+
+          <div class="chart-box">
+            <div class="section-head tight">
+              <h2>Confusion Trend</h2>
+              <span class="muted">Cumulative error rate</span>
+            </div>
+            <canvas id="trend-chart" width="560" height="180"></canvas>
+            <div class="chart-legend">
+              <span><i class="legend-line ml"></i>ML</span>
+              <span><i class="legend-line fl"></i>FL</span>
+            </div>
+          </div>
+
+          <div class="distribution-box">
+            <div class="section-head tight">
+              <h2>Observed Class Mix</h2>
+            </div>
+            <div id="class-distribution" class="distribution-list"></div>
+          </div>
+
+          <div class="feature-box">
+            <div class="section-head tight">
+              <h2>Signal Snapshot</h2>
+            </div>
+            <dl id="feature-list" class="feature-list"></dl>
+          </div>
+        </section>
+
+        <section class="stream-panel">
+          <div class="section-head">
+            <h2>Event Stream</h2>
+            <span class="muted">Latest 300 events</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>True</th>
+                  <th>ML</th>
+                  <th>FL</th>
+                  <th>Agree</th>
+                </tr>
+              </thead>
+              <tbody id="stream-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
